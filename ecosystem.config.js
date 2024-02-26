@@ -9,6 +9,7 @@ module.exports = {
         NODE_ENV: "production",
         PORT: 4058,
         DATABASE: "mongodb://10.200.90.152:27017/attendance-report",
+        PATH: "D:/images/Attendance-Report/data3.csv"
       },
     },
   ],

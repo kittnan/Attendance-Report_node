@@ -6,7 +6,7 @@ const fs = require('fs');
 const XLSX = require('xlsx');
 const moment = require("moment");
 const RECORD = require("../models/record");
-
+const dotenv = require("dotenv");
 // readData('../doc/data.csv')
 
 async function readData(filePath) {
@@ -96,20 +96,24 @@ function ExcelDateToJSDate(date) {
 
 // Define routes to handle file uploads
 router.post('/upload', (req, res) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.sendStatus(400).send('No files were uploaded.');
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.sendStatus(400).send('No files were uploaded.');
+    }
+
+    const uploadedFile = req.files.uploadedFile;
+    uploadedFile.mv(process.env.PATHDOC, async (err) => {
+      if (err) {
+        return res.sendStatus(500)
+      }
+      const result = await readData(process.env.PATHDOC)
+      res.json({ ok: 200 })
+    });
+  } catch (error) {
+    console.log("🚀 ~ error:", error)
+    return res.sendStatus(500)
   }
 
-  const uploadedFile = req.files.uploadedFile;
-
-  // Use the mv() method to save the file to a designated location
-  uploadedFile.mv('C:/@Develop/Working hours GA/WorkingHoursGA_node/src/doc/data3.csv', async (err) => {
-    if (err) {
-      return res.sendStatus(500)
-    }
-    const result = await readData('C:/@Develop/Working hours GA/WorkingHoursGA_node/src/doc/data3.csv')
-    res.json({ok:200})
-  });
 });
 
 module.exports = router;

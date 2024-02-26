@@ -11,8 +11,8 @@ mongoose.set("strictQuery", false);
 
 const dotenv = require("dotenv");
 
-dotenv.config({ path: `.env.production` });
-// dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+// dotenv.config({ path: `.env.production` });
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 console.log("PORT:", process.env.PORT);
 let mongooseConnect = require("./connect");
 const port = process.env.PORT;
